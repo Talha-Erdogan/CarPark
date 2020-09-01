@@ -29,8 +29,15 @@ namespace CarPark.API
         public void ConfigureServices(IServiceCollection services)
         {
             // business service ve interface DI container tanimlari
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IAuthService, AuthService>();
-           
+            services.AddTransient<ICarService, CarService>();
+            services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<ILocationMoveService, LocationMoveService>();
+            services.AddTransient<IPersonnelService, PersonnelService>();
+            services.AddTransient<IProfileService, ProfileService>();
+            services.AddTransient<IProfileDetailService, ProfileDetailService>();
+            services.AddTransient<IProfilePersonnelService, ProfilePersonnelService>();
 
             services.AddSingleton<IConfiguration>(Configuration); //add Configuration to our services collection
             services.AddControllers();
