@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarPark.API.Business.Interfaces;
 using CarPark.API.Business.Models;
-using CarPark.API.Business.Models.Location;
+using CarPark.API.Business.Models.Personnel;
 using CarPark.API.Common.Enums;
 using CarPark.API.Data.Entity;
-using CarPark.API.Filters;
 using CarPark.API.Models;
-using CarPark.API.Models.Location;
+using CarPark.API.Models.Personnel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +16,7 @@ namespace CarPark.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class LocationController : ControllerBase
+    public class PersonnelController : ControllerBase
     {
         #region Http Status Code
         //200-> OK
@@ -28,30 +27,31 @@ namespace CarPark.API.Controllers
         //404-> Not Found(istenilen veri yoksa kullanılabilir veya guncelleme yapılacak veri var ise ve parametre ile gönderilen Id 'ye ait veri yoksa kullanılabilir.)
         //500-> Internal Server Error(Genel sorun ve hata mesajı olarak kullanılabilir.)
         #endregion
-        private readonly ILocationService _locationService;
+        private readonly IPersonnelService _personnelService;
 
-        public LocationController(ILocationService locationService)
+        public PersonnelController(IPersonnelService personnelService)
         {
-            _locationService = locationService;
+            _personnelService = personnelService;
         }
 
         [Route("")]
         [HttpGet]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_LIST)]
+        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PERSONNEL_LIST)]
         public IActionResult GetAllPaginatedWithDetail([FromQuery] GetAllPaginatedRequestModel requestModel, [FromHeader] string displayLanguage)
         {
-            var responseModel = new Return<PaginatedList<Location>>();
+            var responseModel = new Return<PaginatedList<Personnel>>();
             responseModel.DisplayLanguage = displayLanguage;
 
             try
             {
-                var searchFilter = new LocationSearchFilter();
+                var searchFilter = new PersonnelSearchFilter();
                 searchFilter.CurrentPage = requestModel.CurrentPage.HasValue ? requestModel.CurrentPage.Value : 1;
                 searchFilter.PageSize = requestModel.PageSize.HasValue ? requestModel.PageSize.Value : 10;
                 searchFilter.SortOn = requestModel.SortOn;
                 searchFilter.SortDirection = requestModel.SortDirection;
                 searchFilter.Filter_Name = requestModel.Name;
-                responseModel.Data = _locationService.GetAllPaginatedWithDetailBySearchFilter(searchFilter);
+                searchFilter.Filter_LastName = requestModel.LastName;
+                responseModel.Data = _personnelService.GetAllPaginatedWithDetailBySearchFilter(searchFilter);
 
                 responseModel.Status = ResultStatusCodeStatic.Success;
                 responseModel.Message = "Success";
@@ -79,11 +79,11 @@ namespace CarPark.API.Controllers
         //[TokenAuthorizeFilter]
         public IActionResult GetById(int id, [FromHeader] string displayLanguage)
         {
-            var responseModel = new Return<Location>();
+            var responseModel = new Return<Personnel>();
             responseModel.DisplayLanguage = displayLanguage;
             try
             {
-                responseModel.Data = _locationService.GetById(id);
+                responseModel.Data = _personnelService.GetById(id);
                 if (responseModel.Data == null)
                 {
                     responseModel.Status = ResultStatusCodeStatic.InternalServerError;
@@ -121,17 +121,23 @@ namespace CarPark.API.Controllers
 
 
         [HttpPost]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_ADD)]
+        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PERSONNEL_ADD)]
         public IActionResult Add([FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
-            var responseModel = new Return<Location>();
+            var responseModel = new Return<Personnel>();
             responseModel.DisplayLanguage = displayLanguage;
             try
             {
-                var record = new Location();
+                var record = new Personnel();
+                record.TC = requestModel.TC;
                 record.Name = requestModel.Name;
+                record.LastName = requestModel.LastName;
+                record.Phone = requestModel.Phone;
+                record.Address = requestModel.Address;
+                record.UserName = requestModel.UserName;
+                record.Password = requestModel.Password;
 
-                var dbResult = _locationService.Add(record);
+                var dbResult = _personnelService.Add(record);
 
                 if (dbResult > 0)
                 {
@@ -174,16 +180,22 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpPut]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_EDIT)]
+        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PERSONNEL_EDIT)]
         public IActionResult Edit(int id, [FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
-            var responseModel = new Return<Location>();
+            var responseModel = new Return<Personnel>();
             responseModel.DisplayLanguage = displayLanguage;
             try
             {
-                var record = _locationService.GetById(id);
+                var record = _personnelService.GetById(id);
+                record.TC = requestModel.TC;
                 record.Name = requestModel.Name;
-                var dbResult = _locationService.Update(record);
+                record.LastName = requestModel.LastName;
+                record.Phone = requestModel.Phone;
+                record.Address = requestModel.Address;
+                record.UserName = requestModel.UserName;
+                record.Password = requestModel.Password;
+                var dbResult = _personnelService.Update(record);
                 if (dbResult > 0)
                 {
                     responseModel.Data = record;
@@ -222,8 +234,5 @@ namespace CarPark.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, responseModel);
             }
         }
-
-
-
     }
 }
