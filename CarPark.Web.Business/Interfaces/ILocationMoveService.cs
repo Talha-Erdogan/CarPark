@@ -21,7 +21,7 @@ namespace CarPark.Web.Business.Interfaces
         Task<Return<LocationMove>> GetById(int id);
 
         [Post("")]
-        Task<Return<LocationMove>> Add(AddRequestModel addUsefulLink);
+        Task<Return<LocationMove>> Add(AddRequestModel addRequestModel);
 
         //[Multipart]
         //[Post("/upload-file")]

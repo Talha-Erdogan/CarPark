@@ -1,5 +1,7 @@
 ﻿using CarPark.Web.Business.Models;
+using CarPark.Web.Business.Models.Personnel;
 using CarPark.Web.Business.Models.Profile;
+using CarPark.Web.Business.Models.ProfilePersonnel;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -17,5 +19,17 @@ namespace CarPark.Web.Business.Interfaces
         [Get("/GetAllProfileByCurrentUser?PersonnelId={personnelId}")]
         Task<Return<List<Profile>>> GetAllProfileByCurrentUser([Query] int personnelId);
 
+        [Get("/GetAllPersonnelPaginatedWithDetail?ProfileId={profileId}&Personnel_Name={personnel_Name}&Personnel_LastName={personnel_LastName}")]
+        Task<Return<PaginatedList<Personnel>>> GetAllPersonnelPaginatedWithDetail([Query] int profileId, [Query] string personnel_Name, [Query] string personnel_LastName);
+
+        [Get("/GetAllPersonnelWhichIsNotIncludedPaginatedWithDetail?ProfileId={profileId}&Personnel_Name={personnel_Name}&Personnel_LastName={personnel_LastName}")]
+        Task<Return<PaginatedList<Personnel>>> GetAllPersonnelWhichIsNotIncludedPaginatedWithDetail([Query] int profileId, [Query] string personnel_Name, [Query] string personnel_LastName);
+
+        [Post("")]
+        Task<Return<ProfilePersonnel>> Add(Business.Models.ProfilePersonnel.AddRequestModel addRequestModel);
+
+
+        [Delete("/?ProfileId={profileId}&PersonnelId={personnelId}")]
+        Task<Return<int>> Delete([Query] int profileId, [Query] int personnelId);
     }
 }

@@ -23,12 +23,27 @@ namespace CarPark.Web.Business
             _client = RestService.For<IProfileDetailService>(new HttpClient(new AuthenticatedHttpClientHandler(SessionHelper.GetUserToken)) { BaseAddress = new Uri(apiBaseUrl) });
         }
 
-
         public async Task<Return<List<Auth>>> GetAllAuthByCurrentUser(int personnelId)
         {
             return await _client.GetAllAuthByCurrentUser(personnelId);
         }
 
-        
+        public async Task<Return<List<Auth>>> GetAllAuthByProfileId(int personnelId)
+        {
+            return await _client.GetAllAuthByProfileId(personnelId);
+        }
+
+        public async Task<Return<List<Auth>>> GetAllAuthByProfileIdWhichIsNotIncluded(int personnelId)
+        {
+            return await _client.GetAllAuthByProfileIdWhichIsNotIncluded(personnelId);
+        }
+
+        public async Task<Return<Auth>> Add(Business.Models.ProfileDetail.AddRequestModel addRequestModel)
+        {
+            Return<Auth> result = new Return<Auth>();
+            return await _client.Add(addRequestModel);
+        }
+
+        public async Task<Return<int>> Delete(int profileId,int authId) => await _client.Delete(profileId,authId);
     }
 }

@@ -38,7 +38,12 @@ namespace CarPark.Web
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IProfileDetailService, ProfileDetailService>();
             services.AddTransient<IProfilePersonnelService, ProfilePersonnelService>();
-
+            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<ICarService, CarService>();
+            services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<ILocationMoveService, LocationMoveService>();
+            services.AddTransient<IPersonnelService, PersonnelService>();
+            services.AddTransient<IProfileService, ProfileService>();
 
             services.AddSingleton<IConfiguration>(Configuration); //add Configuration to our services collection
 
