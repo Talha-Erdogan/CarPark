@@ -10,6 +10,9 @@ namespace CarPark.API.Business.Interfaces
     public interface ILocationMoveService
     {
         PaginatedList<LocationMoveWithDetail> GetAllPaginatedWithDetailBySearchFilter(LocationMoveSearchFilter searchFilter);
+        List<LocationWithDetail> GetAllLocationListWithDetail();
+        LocationWithDetail GetLocationByLocationIdWithDetail(int locationId);
+        List<Car> GetAllCarWhichIsNotLocationMove();
         List<LocationMove> GetAll();
         LocationMove GetById(int id);
         int Add(LocationMove record);

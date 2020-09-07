@@ -17,8 +17,18 @@ namespace CarPark.Web.Business.Interfaces
         [Get("/items?CurrentPage={currentPage}&PageSize={pageSize}&SortOn={sortOn}&SortDirection={sortDirection}&Plate={plate}&LocationName={locationName}")]
         Task<Return<PaginatedList<LocationMoveWithDetail>>> GetAllPaginatedWithDetailBySearchFilter([Query] int currentPage, [Query] int pageSize, [Query] string sortOn, [Query] string sortDirection, [Query] string plate, [Query] string locationName);
 
+        [Get("/with-detail")]
+        Task<Return<List<LocationWithDetail>>> GetAllWithDetail();
+        //car-list
+        [Get("/car-list")]
+        Task<Return<List<Models.Car.Car>>> GetAllCarWhichIsNotLocationMove();
+
         [Get("/{id}")]
         Task<Return<LocationMove>> GetById(int id);
+
+
+        [Get("/{locationId}/with-detail")]
+        Task<Return<LocationWithDetail>> GetLocationByLocationIdWithDetail(int locationId);
 
         [Post("")]
         Task<Return<LocationMove>> Add(AddRequestModel addRequestModel);

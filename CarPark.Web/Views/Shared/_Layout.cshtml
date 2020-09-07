@@ -191,21 +191,14 @@
                         </li>
                     }
 
-                    @if (SessionHelper.CheckAuthForCurrentUser(new string[] { AuthCodeStatic.PAGE_LOCATIONMOVE_ADD, AuthCodeStatic.PAGE_LOCATIONMOVE_LIST }))
+                    @if (SessionHelper.CheckAuthForCurrentUser(new string[] {  AuthCodeStatic.PAGE_LOCATIONMOVE_LIST }))
                     {
                         <li class="nav-item nav-dropdown">
                             <a class="nav-link nav-dropdown-toggle" href="#">
                                 <i class="nav-icon icon-layers"></i> Move's
                             </a>
                             <ul class="nav-dropdown-items">
-                                @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_LOCATIONMOVE_ADD))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/LocationMove/Add">
-                                            <i class="nav-icon icon-cursor"></i> Move Add
-                                        </a>
-                                    </li>
-                                }
+                               
                                 @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST))
                                 {
                                     <li class="nav-item">

@@ -27,6 +27,9 @@ namespace CarPark.Web.Business
             return await _client.GetAllPaginatedWithDetailBySearchFilter(currentPage, pageSize, sortOn, sortDirection, filterPlate, filterLocationName);
         }
 
+        public async Task<Return<List<LocationWithDetail>>> GetAllWithDetail() => await _client.GetAllWithDetail();
+        public async Task<Return<LocationWithDetail>> GetLocationByLocationIdWithDetail(int locationId) => await _client.GetLocationByLocationIdWithDetail(locationId);
+        public async Task<Return<List<Models.Car.Car>>> GetAllCarWhichIsNotLocationMove() => await _client.GetAllCarWhichIsNotLocationMove();
         public async Task<Return<LocationMove>> GetById(int id) => await _client.GetById(id);
 
         public async Task<Return<LocationMove>> Add(AddRequestModel addRequestModel)

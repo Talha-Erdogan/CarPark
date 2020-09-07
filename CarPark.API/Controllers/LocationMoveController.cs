@@ -75,6 +75,115 @@ namespace CarPark.API.Controllers
             }
         }
 
+        [Route("with-detail")]
+        [HttpGet]
+        //[TokenAuthorizeFilter]
+        public IActionResult GetAllWithDetail([FromHeader] string displayLanguage)
+        {
+            Return<List<LocationWithDetail>> responseModel = new Return<List<LocationWithDetail>>() { DisplayLanguage = displayLanguage };
+            try
+            {
+                var locationMove = _locationMoveService.GetAllLocationListWithDetail();
+                responseModel.Data = locationMove;
+                responseModel.Status = ResultStatusCodeStatic.Success;
+                responseModel.Message = "Success";
+                responseModel.Success = true;
+                return Ok(responseModel);
+            }
+            catch (Exception ex)
+            {
+                responseModel.Status = ResultStatusCodeStatic.InternalServerError;
+                responseModel.Message = "An error occurred";
+                responseModel.Success = false;
+                ReturnError error = new ReturnError();
+                error.Key = "500";
+                error.Message = ex.Message;
+                error.Code = 500;
+                responseModel.Errors = new List<ReturnError>();
+                responseModel.Errors.Add(error);
+                responseModel.Data = null; //hata oluştugundan dolayı Data null olarak dönülür.
+                return StatusCode(StatusCodes.Status500InternalServerError, responseModel);
+            }
+        }
+
+        [Route("{locationId}/with-detail")]
+        [HttpGet]
+        //[TokenAuthorizeFilter]
+        public IActionResult GetLocationByLocationIdWithDetail(int locationId, [FromHeader] string displayLanguage)
+        {
+            var responseModel = new Return<LocationWithDetail>();
+            responseModel.DisplayLanguage = displayLanguage;
+            try
+            {
+                responseModel.Data = _locationMoveService.GetLocationByLocationIdWithDetail(locationId);
+                if (responseModel.Data == null)
+                {
+                    responseModel.Status = ResultStatusCodeStatic.InternalServerError;
+                    responseModel.Message = "Record Not Found.";
+                    responseModel.Success = false;
+                    ReturnError error = new ReturnError();
+                    error.Key = "404";
+                    error.Message = "Record Not Found.";
+                    error.Code = 404;
+                    responseModel.Errors = new List<ReturnError>();
+                    responseModel.Errors.Add(error);
+                    responseModel.Data = null; //hata oluştugundan dolayı Data null olarak dönülür.
+                    return NotFound(responseModel);
+                }
+                responseModel.Status = ResultStatusCodeStatic.Success;
+                responseModel.Message = "Success";
+                responseModel.Success = true;
+                return Ok(responseModel);
+            }
+            catch (Exception ex)
+            {
+                responseModel.Status = ResultStatusCodeStatic.InternalServerError;
+                responseModel.Message = "An error occurred";
+                responseModel.Success = false;
+                ReturnError error = new ReturnError();
+                error.Key = "500";
+                error.Message = ex.Message;
+                error.Code = 500;
+                responseModel.Errors = new List<ReturnError>();
+                responseModel.Errors.Add(error);
+                responseModel.Data = null; //hata oluştugundan dolayı Data null olarak dönülür.
+                return StatusCode(StatusCodes.Status500InternalServerError, responseModel);
+            }
+        }
+
+
+        [Route("car-list")]
+        [HttpGet]
+        //[TokenAuthorizeFilter]
+        public IActionResult GetAllCarWhichIsNotLocationMove([FromHeader] string displayLanguage)
+        {
+            Return<List<Car>> responseModel = new Return<List<Car>>() { DisplayLanguage = displayLanguage };
+            try
+            {
+                var locationMove = _locationMoveService.GetAllCarWhichIsNotLocationMove();
+                responseModel.Data = locationMove;
+                responseModel.Status = ResultStatusCodeStatic.Success;
+                responseModel.Message = "Success";
+                responseModel.Success = true;
+                return Ok(responseModel);
+            }
+            catch (Exception ex)
+            {
+                responseModel.Status = ResultStatusCodeStatic.InternalServerError;
+                responseModel.Message = "An error occurred";
+                responseModel.Success = false;
+                ReturnError error = new ReturnError();
+                error.Key = "500";
+                error.Message = ex.Message;
+                error.Code = 500;
+                responseModel.Errors = new List<ReturnError>();
+                responseModel.Errors.Add(error);
+                responseModel.Data = null; //hata oluştugundan dolayı Data null olarak dönülür.
+                return StatusCode(StatusCodes.Status500InternalServerError, responseModel);
+            }
+        }
+
+
         [Route("{Id}")]
         [HttpGet]
         //[TokenAuthorizeFilter]
