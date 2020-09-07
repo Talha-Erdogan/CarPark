@@ -1,0 +1,362 @@
+﻿@using CarPark.Web.Business.Common
+@using CarPark.Web.Controllers
+
+@model CarPark.Web.Models.ProfilePersonnel.BatchEditViewModel
+@{
+    ViewData["Title"] = "BatchEdit";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i> Profile Personnel - Batch Edit
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("BatchEdit", "ProfilePersonnel", FormMethod.Post, new { @class = "form-horizontal input-sm", @id = "batchEditForm" }))
+                {
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <div class="form-group row">
+                                <div class="col-md-4"></div>
+                                <label class="col-md-1 col-form-label">Profile</label>
+                                <div class="col-md-3" id="dvProfileCombobox">
+                                    @Html.DropDownListFor(m => m.ProfileId, Model.ProfileSelectList, "Select", new { @class = "form-control form-control-sm", @id = "cbProfile" })
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+
+                    @Html.HiddenFor(m => m.ProfileId)
+                    @Html.HiddenFor(m => m.PersonnelWhichIsNotIncludeList.PageSize, new { @id = "hiddenPersonnelWhichIsNotIncludePageSize" })
+                    @Html.HiddenFor(m => m.PersonnelWhichIsNotIncludeList.CurrentPage, new { @id = "hiddenPersonnelWhichIsNotIncludeCurrentPage" })
+                    @Html.HiddenFor(m => m.PersonnelWhichIsNotIncludeList.SortOn, new { @id = "hiddenPersonnelWhichIsNotIncludeSortOn" })
+                    @Html.HiddenFor(m => m.PersonnelWhichIsNotIncludeList.SortDirection, new { @id = "hiddenPersonnelWhichIsNotIncludeSortDirection" })
+                    @Html.HiddenFor(m => m.PersonnelList.PageSize, new { @id = "hiddenPersonnelPageSize" })
+                    @Html.HiddenFor(m => m.PersonnelList.CurrentPage, new { @id = "hiddenPersonnelCurrentPage" })
+                    @Html.HiddenFor(m => m.PersonnelList.SortOn, new { @id = "hiddenPersonnelSortOn" })
+                    @Html.HiddenFor(m => m.PersonnelList.SortDirection, new { @id = "hiddenPersonnelSortDirection" })
+
+                    <div class="row">
+
+                        <div class="col-md-5 p-0 m-0" style="border:#8B8B8B solid 1px;padding-bottom:2px; padding-top:2px;">
+                            <div class="text-center">
+                                <strong>
+                                    <label style="margin-top:0.5em;margin-bottom:0px;">Undefined Personnels</label>
+                                </strong>
+                                <hr />
+                            </div>
+
+                            <div style="height:auto; margin-bottom:2px;">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label">Name</label>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(m => m.PersonnelWhichIsNotIncludeList.Filter.Filter_Personnel_Name, new { @class = "form-control form-control-sm" })
+                                            @Html.ValidationMessageFor(m => m.PersonnelWhichIsNotIncludeList.Filter.Filter_Personnel_Name, null, new { @class = "help-block text-danger" })
+                                        </div>
+
+                                        <label class="col-md-2 col-form-label">Last Name</label>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(m => m.PersonnelWhichIsNotIncludeList.Filter.Filter_Personnel_LastName, new { @class = "form-control form-control-sm" })
+                                            @Html.ValidationMessageFor(m => m.PersonnelWhichIsNotIncludeList.Filter.Filter_Personnel_LastName, null, new { @class = "help-block text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <button class="btn btn-sm btn-primary" type="submit" name="SubmitType" value="PersonnelWhichIsNotIncludeListList">
+                                                List
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="text-left small">
+                                        Total Record: @Model.PersonnelWhichIsNotIncludeList.DataList.TotalCount Displaying Records: @Model.PersonnelWhichIsNotIncludeList.DataList.From - @Model.PersonnelWhichIsNotIncludeList.DataList.To
+                                        <div class="float-right">
+                                            <span>Page Size:</span> @Html.TextBox("txtPersonnelWhichIsNotIncludePageSize", "", new { @class = "form-control form-control-sm d-inline-block onlyNumberEntry", @id = "txtPersonnelWhichIsNotIncludePageSize", @style = " width:50px; height:calc(1.5em + 0.5rem - 2px);" })
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>*</th>
+                                                    <th>Personnel Id</th>
+
+                                                    <th>
+                                                        <a href="javascript:void(0)" onclick="ClickSortingPersonnelNotInclude('Name','@(Model.PersonnelWhichIsNotIncludeList.DataList.SortDirection == "ASC" ? "DESC" : "ASC")')">
+                                                            Name
+                                                            @if (Model.PersonnelWhichIsNotIncludeList.DataList.SortOn == "Name")
+                                                            {
+                                                                if (Model.PersonnelWhichIsNotIncludeList.DataList.SortDirection == "ASC")
+                                                                {<i class="fa fa-angle-up"></i> }
+                                                                else
+                                                                { <i class="fa fa-angle-down"></i>}
+                                                            }
+                                                        </a>
+                                                    </th>
+
+                                                    <th>
+                                                        <a href="javascript:void(0)" onclick="ClickSortingPersonnelNotInclude('LastName','@(Model.PersonnelWhichIsNotIncludeList.DataList.SortDirection == "ASC" ? "DESC" : "ASC")')">
+                                                            Last Name
+                                                            @if (Model.PersonnelWhichIsNotIncludeList.DataList.SortOn == "LastName")
+                                                            {
+                                                                if (Model.PersonnelWhichIsNotIncludeList.DataList.SortDirection == "ASC")
+                                                                {<i class="fa fa-angle-up"></i> }
+                                                                else
+                                                                { <i class="fa fa-angle-down"></i>}
+                                                            }
+                                                        </a>
+                                                    </th>
+
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @for (var i = 0; i < Model.PersonnelWhichIsNotIncludeList.DataList.Items.Count(); i++)
+                                                {
+
+                                                    <tr>
+                                                        <td>
+                                                            @Html.CheckBoxFor(it => it.PersonnelWhichIsNotIncludeList.DataList.Items[i].Checked)
+                                                            @Html.HiddenFor(it => it.PersonnelWhichIsNotIncludeList.DataList.Items[i].Id)
+                                                        </td>
+                                                        <td>
+                                                            @Model.PersonnelWhichIsNotIncludeList.DataList.Items[i].Id
+                                                        </td>
+                                                        <td>
+                                                            @Model.PersonnelWhichIsNotIncludeList.DataList.Items[i].Name
+                                                        </td>
+                                                        <td>
+                                                            @Model.PersonnelWhichIsNotIncludeList.DataList.Items[i].LastName
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                    @await Html.PartialAsync("_PagingPartialPersonnelWhichIsNotIncludeList", Model)
+                                </div>
+                            </div>
+                            @*<div>
+                                    <button class="btn btn-sm btn-primary" type="submit" id="btnSubmit" name="SubmitType" value="Add">
+                                        <i class="fa fa-dot-circle-o"></i> @LangHelper.Localize( "Shared", "btnAdd", SessionHelper.CurrentLanguageTwoChar)
+                                    </button>
+                                </div>*@
+                        </div>
+
+                        <div class=" col-md-2 text-center align-self-center  p-0 m-0">
+                            <div class="mb-1">
+                                <button class="btn btn-sm btn-primary" type="submit" id="btnSubmit" name="SubmitType" value="Add">
+                                    <i class="fa fa-angle-double-right fa-2x"></i> Add
+                                </button>
+                            </div>
+
+                            <div class="mt-1">
+                                <button class="btn btn-sm btn-danger" type="submit" id="btnSubmit" name="SubmitType" value="Delete">
+                                    <i class="fa fa-angle-double-left fa-2x"></i>&nbsp; Delete
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-5 p-0 m-0" style="border:#8B8B8B solid 1px;padding-bottom:2px; padding-top:2px;">
+                            <div class="text-center">
+                                <strong>
+                                    <label style="margin-top:0.5em;margin-bottom:0px;">Defined Personnels</label>
+                                </strong>
+                                <hr />
+                            </div>
+                            <div style="height:auto; padding-bottom:2px;">
+                                <div class="col-lg-12">
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label">Name</label>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(m => m.PersonnelList.Filter.Filter_Personnel_Name, new { @class = "form-control form-control-sm" })
+                                            @Html.ValidationMessageFor(m => m.PersonnelList.Filter.Filter_Personnel_Name, null, new { @class = "help-block text-danger" })
+                                        </div>
+
+                                        <label class="col-md-2 col-form-label">Last Name</label>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(m => m.PersonnelList.Filter.Filter_Personnel_LastName, new { @class = "form-control form-control-sm" })
+                                            @Html.ValidationMessageFor(m => m.PersonnelList.Filter.Filter_Personnel_LastName, null, new { @class = "help-block text-danger" })
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <button class="btn btn-sm btn-primary" type="submit" name="SubmitType" value="PersonnelWhichIsNotIncludeListList">
+                                                List
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-left small">
+                                        TotalRecord: @Model.PersonnelList.DataList.TotalCount Displaying Records : @Model.PersonnelList.DataList.From - @Model.PersonnelList.DataList.To
+                                        <div class="float-right">
+                                            <span>Page Size:</span> @Html.TextBox("txtPersonnelPageSize", "", new { @class = "form-control form-control-sm d-inline-block onlyNumberEntry", @id = "txtPersonnelPageSize", @style = " width:50px; height:calc(1.5em + 0.5rem - 2px);" })
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>*</th>
+                                                    <th>Personnel Id</th>
+
+                                                    <th>
+                                                        <a href="javascript:void(0)" onclick="ClickSortingPersonnel('Name','@(Model.PersonnelList.DataList.SortDirection == "ASC" ? "DESC" : "ASC")')">
+                                                            Name
+                                                            @if (Model.PersonnelList.DataList.SortOn == "Name")
+                                                            {
+                                                                if (Model.PersonnelList.DataList.SortDirection == "ASC")
+                                                                {<i class="fa fa-angle-up"></i> }
+                                                                else
+                                                                { <i class="fa fa-angle-down"></i>}
+                                                            }
+                                                        </a>
+                                                    </th>
+
+                                                    <th>
+                                                        <a href="javascript:void(0)" onclick="ClickSortingPersonnel('LastName','@(Model.PersonnelList.DataList.SortDirection == "ASC" ? "DESC" : "ASC")')">
+                                                            Last Name
+                                                            @if (Model.PersonnelList.DataList.SortOn == "LastName")
+                                                            {
+                                                                if (Model.PersonnelList.DataList.SortDirection == "ASC")
+                                                                {<i class="fa fa-angle-up"></i> }
+                                                                else
+                                                                { <i class="fa fa-angle-down"></i>}
+                                                            }
+                                                        </a>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+
+                                                @for (var i = 0; i < Model.PersonnelList.DataList.Items.Count(); i++)
+                                                {
+
+                                                    <tr>
+                                                        <td>
+                                                            @Html.CheckBoxFor(it => it.PersonnelList.DataList.Items[i].Checked)
+                                                            @Html.HiddenFor(it => it.PersonnelList.DataList.Items[i].Id)
+                                                        </td>
+                                                        <td>
+                                                            @Model.PersonnelList.DataList.Items[i].Id
+                                                        </td>
+                                                        <td>
+                                                            @Model.PersonnelList.DataList.Items[i].Name
+                                                        </td>
+                                                        <td>
+                                                            @Model.PersonnelList.DataList.Items[i].LastName
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @await Html.PartialAsync("_PagingPartialPersonnelList", Model)
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        @if (ViewBag.ErrorMessage != null && !string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                        {
+                            <div class="text-danger">
+                                @ViewBag.ErrorMessage
+                            </div>
+                        }
+                        @if (ViewBag.ErrorMessageList != null)
+                        {
+                            <div class="text-danger">
+                                @foreach (var item in ViewBag.ErrorMessageList)
+                                {
+                                    <span>@item</span>
+                                    <br />
+                                }
+                            </div>
+                        }
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var selectString = 'Select';
+            $(document).ready(function () {
+                $('#cbProfile').change(function () {
+                if ($('#cbProfile').val() != '') {
+                    $('#batchEditForm').submit();
+                }});
+
+                //Personnel list page size and currenpage
+                $('#txtPersonnelPageSize').keyup(function () { $('#hiddenPersonnelPageSize').val($('#txtPersonnelPageSize').val()); });
+                $('#txtPersonnelPageSize').val(@((Model.PersonnelList.PageSize)));
+                $('#txtPersonnelCurrentPage').keyup(function () { $('#hiddenPersonnelCurrentPage').val($('#txtPersonnelCurrentPage').val()); });
+                $('#txtPersonnelCurrentPage').val(@((Model.PersonnelList.CurrentPage)));
+
+                //Personnel Which Is Not Include page size and currenpage
+                $('#txtPersonnelWhichIsNotIncludePageSize').keyup(function () { $('#hiddenPersonnelWhichIsNotIncludePageSize').val($('#txtPersonnelWhichIsNotIncludePageSize').val()); });
+                $('#txtPersonnelWhichIsNotIncludePageSize').val(@((Model.PersonnelWhichIsNotIncludeList.PageSize)));
+                $('#txtPersonnelWhichIsNotIncludeCurrentPage').keyup(function () { $('#hiddenPersonnelWhichIsNotIncludeCurrentPage').val($('#txtPersonnelWhichIsNotIncludeCurrentPage').val()); });
+                $('#txtPersonnelWhichIsNotIncludeCurrentPage').val(@((Model.PersonnelWhichIsNotIncludeList.CurrentPage)));
+
+                //only number entry
+                $(".onlyNumberEntry").keypress(function (e) {
+                    if (e.which == 13) {
+                        $('#batchEditForm').submit();
+                    }
+                    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                        return false;
+                    }
+                });
+            });
+
+                //Personnel sorting and paging
+        function ClickSortingPersonnel(sortOn, sortDirection) {
+            $('#hiddenPersonnelSortOn').val(sortOn);
+            $('#hiddenPersonnelSortDirection').val(sortDirection);
+                    $('#batchEditForm').submit();
+                }
+
+        function ClickPagingPersonnel(currentPage, pageSize) {
+            $('#hiddenPersonnelCurrentPage').val(currentPage);
+            $('#hiddenPersonnelPageSize').val(pageSize);
+                    $('#batchEditForm').submit();
+                }
+
+                //Personnel Which Is Not Include sorting and paging
+        function ClickSortingPersonnelNotInclude(sortOn, sortDirection) {
+            $('#hiddenPersonnelWhichIsNotIncludeSortOn').val(sortOn);
+            $('#hiddenPersonnelWhichIsNotIncludeSortDirection').val(sortDirection);
+                    $('#batchEditForm').submit();
+                }
+
+        function ClickPagingPersonnelWhichIsNotInclude(currentPage, pageSize) {
+            $('#hiddenPersonnelWhichIsNotIncludeCurrentPage').val(currentPage);
+            $('#hiddenPersonnelWhichIsNotIncludePageSize').val(pageSize);
+                    $('#batchEditForm').submit();
+                }
+
+    </script>
+}

@@ -47,8 +47,8 @@ namespace CarPark.Web.Business.Enums
         //profile detail
         public const string PAGE_PROFILEDETAIL_BATCHEDIT = "PAGE_PROFILEDETAIL_BATCHEDIT";
 
-        //profile employee
-        public const string PAGE_PROFILEEMPLOYEE_BATCHEDIT = "PAGE_PROFILEEMPLOYEE_BATCHEDIT";
+        //profile personnel
+        public const string PAGE_PROFILEPERSONNEL_BATCHEDIT = "PAGE_PROFILEPERSONNEL_BATCHEDIT";
 
     }
 }

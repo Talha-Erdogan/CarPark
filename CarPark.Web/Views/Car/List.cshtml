@@ -1,0 +1,208 @@
+﻿@using CarPark.Web.Business.Common
+@using CarPark.Web.Business.Enums
+@using CarPark.Web.Controllers
+
+@model CarPark.Web.Models.Car.ListViewModel
+
+@{
+    ViewData["Title"] = "Car List";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i> Car List
+
+                @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_CAR_ADD))
+                {
+                    <span>- </span><a class="btn btn-sm btn-primary" href="~/Car/Add"> New Record</a>
+                }
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        @using (Html.BeginForm("List", "Car", FormMethod.Post, new { @class = "form-horizontal input-sm", @id = "filterForm" }))
+                        {
+                            <!-- form get'te submit yapilirken page bilgisi ve siralama bilgisinin tutulmasi icin -->
+                            @Html.HiddenFor(m => m.PageSize, new { @id = "hiddenPageSize" });
+                            @Html.HiddenFor(m => m.CurrentPage, new { @id = "hiddenCurrentPage" });
+                            @Html.HiddenFor(m => m.SortOn, new { @id = "hiddenSortOn" })
+                            @Html.HiddenFor(m => m.SortDirection, new { @id = "hiddenSortDirection" })
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Plate </label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Filter.Filter_Plate, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(m => m.Filter.Filter_Plate, null, new { @class = "help-block text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-sm btn-primary" type="submit" name="SubmitType" value="List">
+                                        <i class="fa fa-search"></i> List
+                                    </button>
+                                    <hr />
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="text-left small">
+                    Total Count: @Model.DataList.TotalCount Displaying Records: @Model.DataList.From - @Model.DataList.To
+                    <div class="float-right">
+                        <span>Page Size:</span> @Html.TextBox("txtPageSize", "", new { @class = "form-control form-control-sm d-inline-block onlyNumberEntry", @id = "txtPageSize", @style = " width:50px; height:calc(1.5em + 0.5rem - 2px);" })
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                        <thead>
+                            <tr>
+                                @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_CAR_EDIT))
+                                {
+                                    <th>*</th>
+                                }
+                                <th>
+                                    <a href="javascript:void(0)" onclick="ClickSorting('Plate','@(Model.DataList.SortDirection == "ASC" ? "DESC" : "ASC")')">
+                                        Plate
+                                        @if (Model.DataList.SortOn == "Plate")
+                                        {
+                                            if (Model.DataList.SortDirection == "ASC")
+                                            {<i class="fa fa-angle-up"></i> }
+                                            else
+                                            { <i class="fa fa-angle-down"></i>}
+                                        }
+                                    </a>
+                                </th>
+
+                                <th>
+                                    <a href="javascript:void(0)" onclick="ClickSorting('Brand','@(Model.DataList.SortDirection == "ASC" ? "DESC" : "ASC")')">
+                                        Brand
+                                        @if (Model.DataList.SortOn == "Brand")
+                                        {
+                                            if (Model.DataList.SortDirection == "ASC")
+                                            {<i class="fa fa-angle-up"></i> }
+                                            else
+                                            { <i class="fa fa-angle-down"></i>}
+                                        }
+                                    </a>
+                                </th>
+
+                                <th>
+                                    <a href="javascript:void(0)" onclick="ClickSorting('Model','@(Model.DataList.SortDirection == "ASC" ? "DESC" : "ASC")')">
+                                        Model
+                                        @if (Model.DataList.SortOn == "Model")
+                                        {
+                                            if (Model.DataList.SortDirection == "ASC")
+                                            {<i class="fa fa-angle-up"></i> }
+                                            else
+                                            { <i class="fa fa-angle-down"></i>}
+                                        }
+                                    </a>
+                                </th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.DataList.Items)
+                            {
+                            <tr>
+
+                                @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_CAR_EDIT))
+                                {
+                                    <td>
+                                        <a class="btn btn-sm btn-danger" href="~/Car/Edit/@item.Id">Edit</a>
+                                    </td>
+                                }
+
+                                <td>@item.Plate</td>
+                                <td>@item.Brand</td>
+                                <td>@item.Model</td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+                <nav>
+
+                    @await Html.PartialAsync("_PagingPartial", Model)
+                </nav>
+
+                @if (ViewBag.ErrorMessage != null && !string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="text-danger">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+                @if (ViewBag.ErrorMessageList != null)
+                {
+                    <div class="text-danger">
+                        @foreach (var item in ViewBag.ErrorMessageList)
+                        {
+                            <span>@item</span>
+                            <br />
+                        }
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+
+@section Scripts {
+    <!-- pagesize ve current page js  -->
+    <script>
+        $(document).ready(function(){
+            $('#txtPageSize').keyup(function () {
+                $('#hiddenPageSize').val($('#txtPageSize').val());
+            });
+
+            $('#txtPageSize').val(@((Model.PageSize)));
+
+            $('#txtCurrentPage').keyup(function () {
+                $('#hiddenCurrentPage').val($('#txtCurrentPage').val());
+            });
+
+            $('#txtCurrentPage').val(@((Model.CurrentPage)));
+
+            $(".onlyNumberEntry").keypress(function (e) {
+                if (e.which == 13) {
+                    $('#filterForm').submit();
+                }
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+                }
+            });
+        }); // end of $(document).ready
+
+
+        function ClickSorting(sortOn, sortDirection) {
+            $('#hiddenSortOn').val(sortOn);
+            $('#hiddenSortDirection').val(sortDirection);
+            //$("#btnSorting").click();
+            $('#filterForm').submit();
+        }
+
+        function ClickPaging(currentPage, pageSize) {
+            $('#hiddenCurrentPage').val(currentPage);
+            $('#hiddenPageSize').val(pageSize);
+            //$("#btnPaging").click();
+            $('#filterForm').submit();
+        }
+    </script>
+
+}

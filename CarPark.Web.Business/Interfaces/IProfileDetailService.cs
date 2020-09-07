@@ -18,11 +18,11 @@ namespace CarPark.Web.Business.Interfaces
         [Get("/GetAllAuthByCurrentUser?PersonnelId={personnelId}")]
         Task<Return<List< Auth>>> GetAllAuthByCurrentUser([Query] int personnelId);
 
-        [Get("/GetAllAuthByProfileId?PersonnelId={personnelId}")]
-        Task<Return<List<Auth>>> GetAllAuthByProfileId([Query] int personnelId);
+        [Get("/GetAllAuthByProfileId?ProfileId={profileId}")]
+        Task<Return<List<Auth>>> GetAllAuthByProfileId([Query] int profileId);
 
-        [Get("/GetAllAuthByProfileIdWhichIsNotIncluded?PersonnelId={personnelId}")]
-        Task<Return<List<Auth>>> GetAllAuthByProfileIdWhichIsNotIncluded([Query] int personnelId);
+        [Get("/GetAllAuthByProfileIdWhichIsNotIncluded?ProfileId={profileId}")]
+        Task<Return<List<Auth>>> GetAllAuthByProfileIdWhichIsNotIncluded([Query] int profileId);
 
         [Post("")]
         Task<Return<Auth>> Add(Business.Models.ProfileDetail.AddRequestModel addRequestModel);

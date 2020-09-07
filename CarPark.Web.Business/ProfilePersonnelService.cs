@@ -29,14 +29,14 @@ namespace CarPark.Web.Business
             return await _client.GetAllProfileByCurrentUser(personnelId);
         }
 
-        public async Task<Return<PaginatedList<Personnel>>> GetAllPersonnelPaginatedWithDetail(int profileId, string personnel_Name, string personnel_LastName)
+        public async Task<Return<PaginatedList<Personnel>>> GetAllPersonnelPaginatedWithDetail(int profileId, string personnel_Name, string personnel_LastName,  int currentPage, int pageSize, string sortOn,  string sortDirection)
         {
-            return await _client.GetAllPersonnelPaginatedWithDetail(profileId, personnel_Name, personnel_LastName);
+            return await _client.GetAllPersonnelPaginatedWithDetail(profileId, personnel_Name, personnel_LastName,currentPage,pageSize,sortOn,sortDirection);
         }
 
-        public async Task<Return<PaginatedList<Personnel>>> GetAllPersonnelWhichIsNotIncludedPaginatedWithDetail(int profileId, string personnel_Name, string personnel_LastName)
+        public async Task<Return<PaginatedList<Personnel>>> GetAllPersonnelWhichIsNotIncludedPaginatedWithDetail(int profileId, string personnel_Name, string personnel_LastName, int currentPage, int pageSize, string sortOn, string sortDirection)
         {
-            return await _client.GetAllPersonnelWhichIsNotIncludedPaginatedWithDetail(profileId, personnel_Name, personnel_LastName);
+            return await _client.GetAllPersonnelWhichIsNotIncludedPaginatedWithDetail(profileId, personnel_Name, personnel_LastName, currentPage, pageSize, sortOn, sortDirection);
         }
 
         public async Task<Return<ProfilePersonnel>> Add(Business.Models.ProfilePersonnel.AddRequestModel addRequestModel)

@@ -27,6 +27,8 @@ namespace CarPark.Web.Business
             return await _client.GetAllPaginatedWithDetailBySearchFilter(currentPage, pageSize, sortOn, sortDirection, filterCode, filterName);
         }
 
+        public async Task<Return<List<Profile>>>GetAll() => await _client.GetAll();
+
         public async Task<Return<Profile>> GetById(int id) => await _client.GetById(id);
 
         public async Task<Return<Profile>> Add(AddRequestModel addRequestModel)

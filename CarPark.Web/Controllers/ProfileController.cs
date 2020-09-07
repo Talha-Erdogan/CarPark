@@ -6,26 +6,24 @@ using CarPark.Web.Business.Common;
 using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
-using CarPark.Web.Business.Models.Auth;
-using CarPark.Web.Models.Auth;
+using CarPark.Web.Business.Models.Profile;
+using CarPark.Web.Models.Profile;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPark.Web.Controllers
 {
-    public class AuthController : Controller
+    public class ProfileController : Controller
     {
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly IProfileService _profileService;
+        public ProfileController(IProfileService profileService)
         {
-            _authService = authService;
+            _profileService = profileService;
         }
-
-
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
+        
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
         public ActionResult List()
         {
             ListViewModel model = new ListViewModel();
-
             model.Filter = new ListFilterViewModel();
             model.CurrentPage = 1;
             model.PageSize = 10;
@@ -33,7 +31,7 @@ namespace CarPark.Web.Controllers
             model.PageSize = model.PageSize.HasValue ? model.PageSize.Value : 10;
             model.CurrentLanguageTwoChar = SessionHelper.CurrentLanguageTwoChar;
 
-            var apiResponseModel = _authService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Code, model.Filter.Filter_Name).Result;
+            var apiResponseModel = _profileService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Code, model.Filter.Filter_Name).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
                 model.DataList = apiResponseModel.Data;
@@ -46,7 +44,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
         [HttpPost]
         public ActionResult List(ListViewModel model)
         {
@@ -68,10 +66,8 @@ namespace CarPark.Web.Controllers
 
             model.CurrentPage = model.CurrentPage.HasValue ? model.CurrentPage.Value : 1;
             model.PageSize = model.PageSize.HasValue ? model.PageSize.Value : 10;
-           
             model.CurrentLanguageTwoChar = SessionHelper.CurrentLanguageTwoChar;
-
-            var apiResponseModel = _authService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Code, model.Filter.Filter_Name).Result;
+            var apiResponseModel = _profileService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Code, model.Filter.Filter_Name).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
                 model.DataList = apiResponseModel.Data;
@@ -84,29 +80,29 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
         public ActionResult Add()
         {
-            Models.Auth.AddViewModel model = new AddViewModel();
+            Models.Profile.AddViewModel model = new AddViewModel();
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
         [HttpPost]
-        public ActionResult Add(Models.Auth.AddViewModel model)
+        public ActionResult Add(Models.Profile.AddViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            Business.Models.Auth.AddRequestModel auth = new Business.Models.Auth.AddRequestModel();
-            auth.Code = model.Code;
-            auth.Name = model.Name;
-            var apiResponseModel = _authService.Add(auth).Result;
+           Business.Models.Profile.AddRequestModel profile = new Business.Models.Profile.AddRequestModel();
+            profile.Code = model.Code;
+            profile.Name = model.Name;
+            var apiResponseModel = _profileService.Add(profile).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
-                return RedirectToAction(nameof(AuthController.List));
+                return RedirectToAction(nameof(ProfileController.List));
             }
             else
             {
@@ -115,60 +111,59 @@ namespace CarPark.Web.Controllers
             }
         }
 
-       // [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
         public ActionResult Edit(int id)
         {
-            Models.Auth.AddViewModel model = new AddViewModel();
-            var apiResponseModel = _authService.GetById( id).Result;
+            Models.Profile.AddViewModel model = new AddViewModel();
+            var apiResponseModel = _profileService.GetById(id).Result;
             if (apiResponseModel.Status != ResultStatusCodeStatic.Success)
             {
                 ViewBag.ErrorMessage = apiResponseModel.Message;
                 return View(model);
             }
 
-            var auth = apiResponseModel.Data;
-            if (auth == null)
+            var profile = apiResponseModel.Data;
+            if (profile == null)
             {
                 return View("_ErrorNotExist");
             }
 
-            model.Id = auth.Id;
-            model.Code = auth.Code;
-            model.Name = auth.Name;
+            model.Id = profile.Id;
+            model.Code = profile.Code;
+            model.Name = profile.Name;
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
         [HttpPost]
-        public ActionResult Edit(Models.Auth.AddViewModel model)
+        public ActionResult Edit(Models.Profile.AddViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            var apiResponseModel = _authService.GetById( model.Id).Result;
+            var apiResponseModel = _profileService.GetById(model.Id).Result;
             if (apiResponseModel.Status != ResultStatusCodeStatic.Success)
             {
                 ViewBag.ErrorMessage = apiResponseModel.Message;
                 return View(model);
             }
 
-            var auth = apiResponseModel.Data;
+            var profile = apiResponseModel.Data;
 
-            if (auth == null)
+            if (profile == null)
             {
                 return View("_ErrorNotExist");
             }
-           
+
             AddRequestModel editModel = new AddRequestModel();
-            editModel.Id = auth.Id;
+            editModel.Id = profile.Id;
             editModel.Code = model.Code;
             editModel.Name = model.Name;
 
             if (model.SubmitType == "Edit")
             {
-                var apiEditResponseModel = _authService.Edit( model.Id, editModel).Result;
+                var apiEditResponseModel = _profileService.Edit(model.Id, editModel).Result;
                 if (apiEditResponseModel.Status != ResultStatusCodeStatic.Success)
                 {
                     ViewBag.ErrorMessage = apiEditResponseModel.Message != null ? apiEditResponseModel.Message : "Not Edited";
@@ -177,14 +172,14 @@ namespace CarPark.Web.Controllers
             }
             if (model.SubmitType == "Delete")
             {
-                var apiDeleteResponseModel = _authService.Delete(auth.Id).Result;
+                var apiDeleteResponseModel = _profileService.Delete(profile.Id).Result;
                 if (apiDeleteResponseModel.Status != ResultStatusCodeStatic.Success)
                 {
                     ViewBag.ErrorMessage = apiDeleteResponseModel.Message != null ? apiDeleteResponseModel.Message : "Not Deleted";
                     return View(model);
                 }
             }
-            return RedirectToAction(nameof(AuthController.List));
+            return RedirectToAction(nameof(ProfileController.List));
         }
     }
 }

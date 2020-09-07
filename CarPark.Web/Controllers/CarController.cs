@@ -6,22 +6,22 @@ using CarPark.Web.Business.Common;
 using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
-using CarPark.Web.Business.Models.Auth;
-using CarPark.Web.Models.Auth;
+using CarPark.Web.Business.Models.Car;
+using CarPark.Web.Models.Car;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPark.Web.Controllers
 {
-    public class AuthController : Controller
+    public class CarController : Controller
     {
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly ICarService _carService;
+        public CarController(ICarService carService)
         {
-            _authService = authService;
+            _carService = carService;
         }
 
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_LIST)]
         public ActionResult List()
         {
             ListViewModel model = new ListViewModel();
@@ -33,7 +33,7 @@ namespace CarPark.Web.Controllers
             model.PageSize = model.PageSize.HasValue ? model.PageSize.Value : 10;
             model.CurrentLanguageTwoChar = SessionHelper.CurrentLanguageTwoChar;
 
-            var apiResponseModel = _authService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Code, model.Filter.Filter_Name).Result;
+            var apiResponseModel = _carService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection,model.Filter.Filter_Plate).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
                 model.DataList = apiResponseModel.Data;
@@ -46,7 +46,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_LIST)]
         [HttpPost]
         public ActionResult List(ListViewModel model)
         {
@@ -68,10 +68,10 @@ namespace CarPark.Web.Controllers
 
             model.CurrentPage = model.CurrentPage.HasValue ? model.CurrentPage.Value : 1;
             model.PageSize = model.PageSize.HasValue ? model.PageSize.Value : 10;
-           
+
             model.CurrentLanguageTwoChar = SessionHelper.CurrentLanguageTwoChar;
 
-            var apiResponseModel = _authService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Code, model.Filter.Filter_Name).Result;
+            var apiResponseModel = _carService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Plate).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
                 model.DataList = apiResponseModel.Data;
@@ -84,107 +84,101 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_ADD)]
         public ActionResult Add()
         {
-            Models.Auth.AddViewModel model = new AddViewModel();
+            Models.Car.AddViewModel model = new AddViewModel();
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_ADD)]
         [HttpPost]
-        public ActionResult Add(Models.Auth.AddViewModel model)
+        public ActionResult Add(Models.Car.AddViewModel modell)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ViewBag.ErrorMessage = "Error.";
+                return View(modell);
             }
 
-            Business.Models.Auth.AddRequestModel auth = new Business.Models.Auth.AddRequestModel();
-            auth.Code = model.Code;
-            auth.Name = model.Name;
-            var apiResponseModel = _authService.Add(auth).Result;
+            Business.Models.Car.AddRequestModel car = new Business.Models.Car.AddRequestModel();
+            car.Plate = modell.Plate;
+            car.Brand = modell.Brand;
+            car.Model = modell.Model;
+            var apiResponseModel = _carService.Add(car).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
-                return RedirectToAction(nameof(AuthController.List));
+                return RedirectToAction(nameof(CarController.List));
             }
             else
             {
                 ViewBag.ErrorMessage = apiResponseModel.Message != null ? apiResponseModel.Message : "Kaydedilemedi.";//todo: kulturel olacak NotSaved
-                return View(model);
+                return View(modell);
             }
         }
 
-       // [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
+        // [AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_EDIT)]
         public ActionResult Edit(int id)
         {
-            Models.Auth.AddViewModel model = new AddViewModel();
-            var apiResponseModel = _authService.GetById( id).Result;
+            Models.Car.AddViewModel model = new AddViewModel();
+            var apiResponseModel = _carService.GetById(id).Result;
             if (apiResponseModel.Status != ResultStatusCodeStatic.Success)
             {
                 ViewBag.ErrorMessage = apiResponseModel.Message;
                 return View(model);
             }
 
-            var auth = apiResponseModel.Data;
-            if (auth == null)
+            var car = apiResponseModel.Data;
+            if (car == null)
             {
                 return View("_ErrorNotExist");
             }
 
-            model.Id = auth.Id;
-            model.Code = auth.Code;
-            model.Name = auth.Name;
+            model.Id = car.Id;
+            model.Plate = car.Plate;
+            model.Brand = car.Brand;
+            model.Model = car.Model;
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_EDIT)]
         [HttpPost]
-        public ActionResult Edit(Models.Auth.AddViewModel model)
+        public ActionResult Edit(Models.Car.AddViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var apiResponseModel = _authService.GetById( model.Id).Result;
+            var apiResponseModel = _carService.GetById(model.Id).Result;
             if (apiResponseModel.Status != ResultStatusCodeStatic.Success)
             {
                 ViewBag.ErrorMessage = apiResponseModel.Message;
                 return View(model);
             }
 
-            var auth = apiResponseModel.Data;
+            var car = apiResponseModel.Data;
 
-            if (auth == null)
+            if (car == null)
             {
                 return View("_ErrorNotExist");
             }
-           
-            AddRequestModel editModel = new AddRequestModel();
-            editModel.Id = auth.Id;
-            editModel.Code = model.Code;
-            editModel.Name = model.Name;
 
-            if (model.SubmitType == "Edit")
-            {
-                var apiEditResponseModel = _authService.Edit( model.Id, editModel).Result;
+            AddRequestModel editModel = new AddRequestModel();
+            editModel.Id = car.Id;
+            editModel.Plate = model.Plate;
+            editModel.Brand = model.Brand;
+            editModel.Model = model.Model;
+
+           
+                var apiEditResponseModel = _carService.Edit(model.Id, editModel).Result;
                 if (apiEditResponseModel.Status != ResultStatusCodeStatic.Success)
                 {
                     ViewBag.ErrorMessage = apiEditResponseModel.Message != null ? apiEditResponseModel.Message : "Not Edited";
                     return View(model);
                 }
-            }
-            if (model.SubmitType == "Delete")
-            {
-                var apiDeleteResponseModel = _authService.Delete(auth.Id).Result;
-                if (apiDeleteResponseModel.Status != ResultStatusCodeStatic.Success)
-                {
-                    ViewBag.ErrorMessage = apiDeleteResponseModel.Message != null ? apiDeleteResponseModel.Message : "Not Deleted";
-                    return View(model);
-                }
-            }
-            return RedirectToAction(nameof(AuthController.List));
+           
+            return RedirectToAction(nameof(CarController.List));
         }
     }
 }

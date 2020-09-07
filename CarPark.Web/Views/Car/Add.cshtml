@@ -1,0 +1,87 @@
+﻿@using CarPark.Web.Business.Common
+@using CarPark.Web.Controllers
+
+@model CarPark.Web.Models.Car.AddViewModel
+
+@{
+    ViewData["Title"] = "Car Add";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Car Add</strong>
+            </div>
+            <div class="card-body">
+
+                @using (Html.BeginForm("Add", "Car", FormMethod.Post, new { @class = "form-horizontal input-sm" }))
+                {
+
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Plate</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Plate, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.Plate, null, new { @class = "help-block text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Brand</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Brand, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.Brand, null, new { @class = "help-block text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Model</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Model, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.Model, null, new { @class = "help-block text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <button class="btn btn-sm btn-primary" type="submit" id="btnSubmit">
+                                <i class="fa fa-dot-circle-o"></i> Save
+                            </button>
+                            &nbsp;
+                            <a class="btn btn-sm btn-danger" href="~/Car/List">
+                                <i class="fa fa-ban"></i> Cancel
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            @if (ViewBag.ErrorMessage != null && !string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                            {
+                                <div class="text-danger">
+                                    @ViewBag.ErrorMessage
+                                </div>
+                            }
+                            @if (ViewBag.ErrorMessageList != null)
+                            {
+                                <div class="text-danger">
+                                    @foreach (var item in ViewBag.ErrorMessageList)
+                                    {
+                                        <span>@item</span>
+                                        <br />
+                                    }
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+
+
