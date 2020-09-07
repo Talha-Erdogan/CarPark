@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPark.API.Data", "CarPark
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPark.API.Business", "CarPark.API.Business\CarPark.API.Business.csproj", "{441E60FD-A0CA-48B9-9513-354CC65462EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarPark.Web.Business", "CarPark.Web.Business\CarPark.Web.Business.csproj", "{E35039BD-0729-4580-9557-8D1062A49C7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPark.Web.Business", "CarPark.Web.Business\CarPark.Web.Business.csproj", "{E35039BD-0729-4580-9557-8D1062A49C7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarPark.Web", "CarPark.Web\CarPark.Web.csproj", "{8AEB79F9-2032-439B-BA48-EC0938D4D323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPark.Web", "CarPark.Web\CarPark.Web.csproj", "{8AEB79F9-2032-439B-BA48-EC0938D4D323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_doc", "_doc\_doc.csproj", "{1BB1CD0F-DAAA-4154-BFF9-96FDFA5C2CDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{8AEB79F9-2032-439B-BA48-EC0938D4D323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AEB79F9-2032-439B-BA48-EC0938D4D323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AEB79F9-2032-439B-BA48-EC0938D4D323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BB1CD0F-DAAA-4154-BFF9-96FDFA5C2CDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BB1CD0F-DAAA-4154-BFF9-96FDFA5C2CDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BB1CD0F-DAAA-4154-BFF9-96FDFA5C2CDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BB1CD0F-DAAA-4154-BFF9-96FDFA5C2CDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
