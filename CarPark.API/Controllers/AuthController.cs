@@ -40,7 +40,7 @@ namespace CarPark.API.Controllers
 
         [Route("")]
         [HttpGet]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
         public IActionResult GetAllPaginatedWithDetail([FromQuery] GetAllPaginatedRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<PaginatedList<Auth>>();
@@ -80,7 +80,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetById(int id, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Auth>();
@@ -125,7 +125,7 @@ namespace CarPark.API.Controllers
 
 
         [HttpPost]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
         public IActionResult Add([FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Auth>();
@@ -186,7 +186,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpPut]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
         public IActionResult Edit(int id, [FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Auth>();
@@ -238,7 +238,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpDelete]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_DELETE)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_DELETE)]
         public IActionResult Delete(int id, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Auth>();

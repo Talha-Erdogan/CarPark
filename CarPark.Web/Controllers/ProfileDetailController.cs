@@ -7,6 +7,7 @@ using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
 using CarPark.Web.Business.Models.ProfileDetail;
+using CarPark.Web.Filters;
 using CarPark.Web.Models.ProfileDetail;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,7 +25,7 @@ namespace CarPark.Web.Controllers
             _profileService = profileService;
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEDETAIL_BATCHEDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEDETAIL_BATCHEDIT)]
         public ActionResult BatchEdit()
         {
             BatchEditViewModel model = new BatchEditViewModel();
@@ -35,7 +36,7 @@ namespace CarPark.Web.Controllers
         }
 
         [HttpPost]
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEDETAIL_BATCHEDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEDETAIL_BATCHEDIT)]
         public ActionResult BatchEdit(BatchEditViewModel model)
         {
             if (!ModelState.IsValid)

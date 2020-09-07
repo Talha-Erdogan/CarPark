@@ -6,6 +6,7 @@ using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
 using CarPark.Web.Business.Models.LocationMove;
+using CarPark.Web.Filters;
 using CarPark.Web.Models.LocationMove;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,7 +24,7 @@ namespace CarPark.Web.Controllers
             _carService = carService;
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
         public IActionResult List()
         {
             List<LocationWithDetail> model = new List<LocationWithDetail>();
@@ -40,7 +41,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
         public ActionResult Add(int locationId)
         {
             if (locationId <= 0)
@@ -71,7 +72,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
         [HttpPost]
         public ActionResult Add(Models.LocationMove.AddViewModel model)
         {
@@ -123,7 +124,7 @@ namespace CarPark.Web.Controllers
             }
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
         public ActionResult Edit(int locationId)
         {
             if (locationId <= 0)
@@ -153,7 +154,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
         [HttpPost]
         public ActionResult Edit(Models.LocationMove.AddViewModel model)
         {
@@ -186,8 +187,6 @@ namespace CarPark.Web.Controllers
             }
             return RedirectToAction(nameof(LocationMoveController.List));
         }
-
-
 
 
         [NonAction]

@@ -35,7 +35,7 @@ namespace CarPark.API.Controllers
 
         [Route("GetAllAuthByCurrentUser")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+      //[TokenAuthorizeFilter]
         public IActionResult GetAllAuthByCurrentUser([FromQuery] GetAllByCurrentUserRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<List<Data.Entity.Auth>>();
@@ -81,7 +81,7 @@ namespace CarPark.API.Controllers
 
         [Route("GetAllAuthByProfileId")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetAllAuthByProfileId([FromQuery] GetAllAuthByProfileIdRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<List<Data.Entity.Auth>>() { DisplayLanguage = displayLanguage };
@@ -126,7 +126,7 @@ namespace CarPark.API.Controllers
 
         [Route("GetAllAuthByProfileIdWhichIsNotIncluded")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetAllAuthByProfileIdWhichIsNotIncluded([FromQuery] GetAllAuthByProfileIdWhichIsNotIncludedRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<List<Data.Entity.Auth>>() { DisplayLanguage = displayLanguage };
@@ -170,7 +170,7 @@ namespace CarPark.API.Controllers
 
         [Route("")]
         [HttpPost]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public Return<Data.Entity.ProfileDetail> Add([FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Data.Entity.ProfileDetail>();
@@ -222,7 +222,7 @@ namespace CarPark.API.Controllers
 
         [Route("")]
         [HttpDelete]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public Return<int> DeleteByProfileIdAndAuthId([FromQuery] DeleteByProfileIdAndAuthIdRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<int>() { DisplayLanguage = displayLanguage };

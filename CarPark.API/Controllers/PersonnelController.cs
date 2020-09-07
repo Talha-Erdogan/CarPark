@@ -7,6 +7,7 @@ using CarPark.API.Business.Models;
 using CarPark.API.Business.Models.Personnel;
 using CarPark.API.Common.Enums;
 using CarPark.API.Data.Entity;
+using CarPark.API.Filters;
 using CarPark.API.Models;
 using CarPark.API.Models.Personnel;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +37,7 @@ namespace CarPark.API.Controllers
 
         [Route("")]
         [HttpGet]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PERSONNEL_LIST)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_PERSONNEL_LIST)]
         public IActionResult GetAllPaginatedWithDetail([FromQuery] GetAllPaginatedRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<PaginatedList<Personnel>>();
@@ -76,7 +77,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+       [TokenAuthorizeFilter]
         public IActionResult GetById(int id, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Personnel>();
@@ -121,7 +122,7 @@ namespace CarPark.API.Controllers
 
 
         [HttpPost]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PERSONNEL_ADD)]
+        [TokenAuthorizeFilter]
         public IActionResult Add([FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Personnel>();
@@ -180,7 +181,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpPut]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PERSONNEL_EDIT)]
+        [TokenAuthorizeFilter]
         public IActionResult Edit(int id, [FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Personnel>();

@@ -37,7 +37,7 @@ namespace CarPark.API.Controllers
 
         [Route("")]
         [HttpGet]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_LIST)]
         public IActionResult GetAllPaginatedWithDetail([FromQuery] GetAllPaginatedRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<PaginatedList<LocationMoveWithDetail>>();
@@ -77,7 +77,7 @@ namespace CarPark.API.Controllers
 
         [Route("with-detail")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetAllWithDetail([FromHeader] string displayLanguage)
         {
             Return<List<LocationWithDetail>> responseModel = new Return<List<LocationWithDetail>>() { DisplayLanguage = displayLanguage };
@@ -108,7 +108,7 @@ namespace CarPark.API.Controllers
 
         [Route("{locationId}/with-detail")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetLocationByLocationIdWithDetail(int locationId, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<LocationWithDetail>();
@@ -154,7 +154,7 @@ namespace CarPark.API.Controllers
 
         [Route("car-list")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetAllCarWhichIsNotLocationMove([FromHeader] string displayLanguage)
         {
             Return<List<Car>> responseModel = new Return<List<Car>>() { DisplayLanguage = displayLanguage };
@@ -186,7 +186,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetById(int id, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<LocationMove>();
@@ -231,7 +231,7 @@ namespace CarPark.API.Controllers
 
 
         [HttpPost]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_ADD)]
+        [TokenAuthorizeFilter]
         public IActionResult Add([FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<LocationMove>();
@@ -287,7 +287,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpPut]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_LOCATIONMOVE_EDIT)]
+        [TokenAuthorizeFilter]
         public IActionResult Edit(int id, [FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<LocationMove>();

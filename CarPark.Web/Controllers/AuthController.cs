@@ -7,6 +7,7 @@ using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
 using CarPark.Web.Business.Models.Auth;
+using CarPark.Web.Filters;
 using CarPark.Web.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,7 @@ namespace CarPark.Web.Controllers
         }
 
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
         public ActionResult List()
         {
             ListViewModel model = new ListViewModel();
@@ -46,7 +47,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_LIST)]
         [HttpPost]
         public ActionResult List(ListViewModel model)
         {
@@ -84,14 +85,14 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
         public ActionResult Add()
         {
             Models.Auth.AddViewModel model = new AddViewModel();
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_ADD)]
         [HttpPost]
         public ActionResult Add(Models.Auth.AddViewModel model)
         {
@@ -115,7 +116,7 @@ namespace CarPark.Web.Controllers
             }
         }
 
-       // [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
         public ActionResult Edit(int id)
         {
             Models.Auth.AddViewModel model = new AddViewModel();
@@ -138,7 +139,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_AUTH_EDIT)]
         [HttpPost]
         public ActionResult Edit(Models.Auth.AddViewModel model)
         {

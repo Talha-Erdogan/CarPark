@@ -39,7 +39,7 @@ namespace CarPark.API.Controllers
 
         [Route("")]
         [HttpGet]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
         public IActionResult GetAllPaginatedWithDetail([FromQuery] GetAllPaginatedRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<PaginatedList<Data.Entity.Profile>>() { DisplayLanguage = displayLanguage };
@@ -78,7 +78,7 @@ namespace CarPark.API.Controllers
 
         [Route("All")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetAll([FromHeader] string displayLanguage)
         {
             Return<List<Data.Entity.Profile>> responseModel = new Return<List<Data.Entity.Profile>>() { DisplayLanguage = displayLanguage };
@@ -110,7 +110,7 @@ namespace CarPark.API.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public IActionResult GetById(int id, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Data.Entity.Profile>() { DisplayLanguage = displayLanguage };
@@ -153,7 +153,7 @@ namespace CarPark.API.Controllers
         }
 
         [HttpPost]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
         public IActionResult Add([FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Data.Entity.Profile>();
@@ -211,7 +211,7 @@ namespace CarPark.API.Controllers
 
         [Route("{Id}")]
         [HttpPut]
-        //[TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
+        [TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
         public IActionResult Edit(int id, [FromBody] AddRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Data.Entity.Profile>();
@@ -277,7 +277,7 @@ namespace CarPark.API.Controllers
 
         [Route("{id}")]
         [HttpDelete]
-        // [TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_DELETE)]
+         [TokenAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_DELETE)]
         public IActionResult Delete(int id, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<Data.Entity.Profile>() { DisplayLanguage = displayLanguage };

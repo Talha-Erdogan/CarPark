@@ -36,7 +36,7 @@ namespace CarPark.API.Controllers
 
         [Route("GetAllPersonnelPaginatedWithDetail")]
         [HttpGet]
-        //[TokenAuthorizeFilter]
+        [TokenAuthorizeFilter]
         public Return<PaginatedList<Data.Entity.Personnel>> GetAllPersonnelPaginatedWithDetail([FromQuery] GetAllPersonnelPaginatedRequestModel requestModel, [FromHeader] string displayLanguage)
         {
             var responseModel = new Return<PaginatedList<Data.Entity.Personnel>>() { DisplayLanguage = displayLanguage };

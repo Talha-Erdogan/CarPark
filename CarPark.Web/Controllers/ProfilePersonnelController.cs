@@ -6,6 +6,7 @@ using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
 using CarPark.Web.Business.Models;
 using CarPark.Web.Business.Models.ProfilePersonnel;
+using CarPark.Web.Filters;
 using CarPark.Web.Models.ProfilePersonnel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,7 +27,7 @@ namespace CarPark.Web.Controllers
         }
 
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEPERSONNEL_BATCHEDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEPERSONNEL_BATCHEDIT)]
         public ActionResult BatchEdit()
         {
             BatchEditViewModel model = new BatchEditViewModel();
@@ -48,7 +49,7 @@ namespace CarPark.Web.Controllers
         }
 
         [HttpPost]
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEPERSONNEL_BATCHEDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILEPERSONNEL_BATCHEDIT)]
         public ActionResult BatchEdit(BatchEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -201,9 +202,6 @@ namespace CarPark.Web.Controllers
 
             return View(model);
         }
-
-
-
 
         [NonAction]
         private PaginatedList<PersonnelCheckViewModel> GetAllEmployeeByProfileId(int profileId, string personnelName, string personnelLastName,int currentPage,int pageSize,string sortOn,string sortDirection)

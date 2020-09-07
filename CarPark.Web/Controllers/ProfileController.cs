@@ -7,6 +7,7 @@ using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
 using CarPark.Web.Business.Models.Profile;
+using CarPark.Web.Filters;
 using CarPark.Web.Models.Profile;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace CarPark.Web.Controllers
             _profileService = profileService;
         }
         
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
         public ActionResult List()
         {
             ListViewModel model = new ListViewModel();
@@ -44,7 +45,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_LIST)]
         [HttpPost]
         public ActionResult List(ListViewModel model)
         {
@@ -80,14 +81,14 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
         public ActionResult Add()
         {
             Models.Profile.AddViewModel model = new AddViewModel();
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_ADD)]
         [HttpPost]
         public ActionResult Add(Models.Profile.AddViewModel model)
         {
@@ -111,7 +112,7 @@ namespace CarPark.Web.Controllers
             }
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
         public ActionResult Edit(int id)
         {
             Models.Profile.AddViewModel model = new AddViewModel();
@@ -134,7 +135,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
+        [AppAuthorizeFilter(AuthCodeStatic.PAGE_PROFILE_EDIT)]
         [HttpPost]
         public ActionResult Edit(Models.Profile.AddViewModel model)
         {
