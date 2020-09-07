@@ -33,10 +33,13 @@ namespace CarPark.Web.Business.Common
                     request.Headers.Add("DisplayLanguage", SessionHelper.CurrentLanguageTwoChar);
 
                     var auth = request.Headers.Authorization;
-                    if (auth != null && auth.Parameter !=null)
+                    if (auth != null)
                     {
-                        var token = SessionHelper.CurrentUser.UserToken;
-                        request.Headers.Authorization = new AuthenticationHeaderValue(auth.Scheme, token);
+                        if (SessionHelper.CurrentUser!=null)
+                        {
+                            var token = SessionHelper.CurrentUser.UserToken;
+                            request.Headers.Authorization = new AuthenticationHeaderValue(auth.Scheme, token);
+                        }
                     }
 
                     // U can use for testing
@@ -47,6 +50,8 @@ namespace CarPark.Web.Business.Common
 
                     var result = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
+                  
+
                     switch (result.StatusCode)
                     {
                         case System.Net.HttpStatusCode.RequestTimeout:
@@ -55,6 +60,11 @@ namespace CarPark.Web.Business.Common
 
                         case System.Net.HttpStatusCode.Unauthorized:
                             // TODO unauthorized
+                            break;
+
+                        case System.Net.HttpStatusCode.BadRequest:
+                            // TODO bad request
+                           
                             break;
                     }
 

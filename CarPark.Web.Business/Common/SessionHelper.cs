@@ -1,6 +1,7 @@
 ﻿using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Common.Extensions;
 using CarPark.Web.Business.Interfaces;
+using CarPark.Web.Business.Models;
 using CarPark.Web.Business.Models.Authentication;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -131,7 +132,13 @@ namespace CarPark.Web.Business.Common
             var requestModel = new TokenRequestModel();
             requestModel.UserName = userName;
             requestModel.Password = userPasswordClear;
-            var existUser = authenticationService.Token(requestModel).Result;
+
+          
+           var existUser = authenticationService.Token(requestModel).Result;
+            if (existUser ==null)
+            {
+                return new SessionLoginResult(false, "kullanıcı adı hatalı");
+            }
             if (existUser.Status != ResultStatusCodeStatic.Success)
             {
                 return new SessionLoginResult(false, existUser.Message);

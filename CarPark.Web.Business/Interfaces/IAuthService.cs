@@ -14,7 +14,7 @@ namespace CarPark.Web.Business.Interfaces
     [Headers("Authorization: Bearer")]
     public interface IAuthService
     {
-        [Get("/items?CurrentPage={currentPage}&PageSize={pageSize}&SortOn={sortOn}&SortDirection={sortDirection}&Code={code}&Name={name}")]
+        [Get("/?CurrentPage={currentPage}&PageSize={pageSize}&SortOn={sortOn}&SortDirection={sortDirection}&Code={code}&Name={name}")]
         Task<Return<PaginatedList<Auth>>> GetAllPaginatedWithDetailBySearchFilter([Query] int currentPage, [Query] int pageSize, [Query] string sortOn, [Query] string sortDirection, [Query] string code, [Query] string name);
 
         [Get("/{id}")]

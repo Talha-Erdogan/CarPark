@@ -1,48 +1,514 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Localization
+@using CarPark.Web.Business.Common
+@using Microsoft.Extensions.Localization
+@using CarPark.Web.Business.Enums
+
+<!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @@version v2.1.12
+* @@link https://coreui.io
+* Copyright (c) 2018 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CarPark.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Car Park - Admin Panel">
+    <meta name="author" content="Talha Erdogan - talha.erdogan">
+    <meta name="keyword" content="Car Park">
+    <title>@ViewData["Title"] - Car Park - Admin Panel</title>
+    <!-- Icons-->
+    <link href="~/theme/vendors/@@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="~/theme/vendors/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="~/theme/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/theme/vendors/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="~/theme/css/style.css" rel="stylesheet">
+    <link href="~/theme/vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+    <!-- daterangepicker -->
+    <link href="~/theme/vendors/daterangepicker(2.1.24)/daterangepicker.css" rel="stylesheet" />
+    <!-- select 2 -->
+    <link href="~/theme/vendors/select2-4.0.12/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+
+            .select2-container .select2-selection--single {
+                height: calc(1.5em + 0.75rem + 2px);
+            }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 33px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 6px;
+        }
+    </style>
+
+    <!-- custom theme style -->
+    <style type="text/css">
+        .form-control {
+            border: 1px solid darkgray;
+        }
+
+        .sidebar .nav-link.active {
+            color: #fff;
+            background: #8B8B8B;
+        }
+
+        .sidebar .nav-dropdown-items {
+            padding-left: 15px;
+        }
+    </style>
+
+    @RenderSection("Styles", required: false)
+
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarPark.Web</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <header class="app-header navbar">
+        <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+            @*<img class="navbar-brand-full" src="~/theme/img/brand/logo.svg" width="89" height="25" alt="CoreUI Logo">
+                <img class="navbar-brand-minimized" src="~/theme/img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">*@
+            <span class="navbar-brand-full">&nbsp; <i class="fa fa-tasks"></i> Car Park</span>
+        </a>
+
+        <ul class="nav navbar-nav ml-auto">
+
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    @*<img class="img-avatar" src="~/theme/img/avatars/6.jpg" alt="admin@bootstrapmaster.com">*@
+                    @*<span>Name1 Surname1 (User1) &nbsp;</span>*@
+                    @if (SessionHelper.IsAuthenticated)
+                    {
+                        <span>@SessionHelper.CurrentUser.Name @SessionHelper.CurrentUser.LastName (@SessionHelper.CurrentUser.Id) &nbsp;</span>
+                    }
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+
+                    <a class="dropdown-item" href="/User/DisplayProfile">
+                        <i class="fa fa-shield"></i> User Profile
+                    </a>
+                    <a class="dropdown-item" href="/User/Logout">
+                        <i class="fa fa-lock"></i> Logout
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                @*<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        @{
+                            var currentCulture = new System.Globalization.CultureInfo(SessionHelper.CurrentLanguage);
+                        }
+                        <span title="@currentCulture.DisplayName">@currentCulture.TwoLetterISOLanguageName.ToUpperInvariant() &nbsp;</span>
+                    </a>*@
+                @*<div class="dropdown-menu dropdown-menu-right">
+                        @await Html.PartialAsync("_SelectLanguagePartial")
+                    </div>*@
+
+            </li>
+            <li>
+                <div class="">
+                    @if (SessionHelper.IsAuthenticated)
+                    {
+                        <span>
+                            @*@(SessionHelper.CurrentLanguageTwoChar.ToLowerInvariant().Equals("tr") ? SessionHelper.CurrentUser.ApplianceTrackerDeparment.NameTR : SessionHelper.CurrentUser.ApplianceTrackerDeparment.NameEN)*@
+                            &nbsp;
+                        </span>
+                    }
+                </div>
+            </li>
+        </ul>
+
+    </header>
+    <div class="app-body">
+        <div class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav">
+
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon icon-layers"></i> Profiles And Auths
+                        </a>
+                        <ul class="nav-dropdown-items">
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="~/Profile/Add">
+                                    <i class="nav-icon icon-cursor"></i> Profile Add
+                                </a>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="~/Profile/List">
+                                    <i class="nav-icon icon-cursor"></i>Profile List
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="~/ProfileDetail/BatchEdit">
+                                    <i class="nav-icon icon-cursor"></i> Profile Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="~/ProfileEmployee/BatchEdit">
+                                    <i class="nav-icon icon-cursor"></i> Profile Employees
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#">
+                            <i class="nav-icon icon-layers"></i> Auths
+                        </a>
+                        <ul class="nav-dropdown-items">
+
+                           
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/Auth/Add">
+                                        <i class="nav-icon icon-cursor"></i> Auths Add
+                                    </a>
+                                </li>
+                           
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/Auth/List">
+                                        <i class="nav-icon icon-cursor"></i> Auth List
+                                    </a>
+                                </li>
+                           
+                        </ul>
+                    </li>
+
+
+                    @*@if (SessionHelper.CheckAuthForCurrentUser(new string[] { AuthCodeStatic.PAGE_APPLIANCE_ADD, AuthCodeStatic.PAGE_APPLIANCE_LIST }))
+        {
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon icon-layers"></i> Appliances
+                </a>
+                <ul class="nav-dropdown-items">
+
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_APPLIANCE_ADD))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" href="~/Appliance/Add">
+                                <i class="nav-icon icon-cursor"></i> Appliance Add
+                            </a>
                         </li>
+                    }
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_APPLIANCE_LIST))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" href="~/Appliance/List">
+                                <i class="nav-icon icon-cursor"></i> Appliance List
+                            </a>
                         </li>
-                    </ul>
+                    }
+                </ul>
+            </li>
+        }
+
+        @if (SessionHelper.CheckAuthForCurrentUser(new string[] { AuthCodeStatic.PAGE_AUTH_LIST, AuthCodeStatic.PAGE_AUTH_ADD }))
+        {
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon icon-layers"></i> Auths
+                </a>
+                <ul class="nav-dropdown-items">
+
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_AUTH_ADD))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Auth/Add">
+                                <i class="nav-icon icon-cursor"></i> Auths Add
+                            </a>
+                        </li>
+                    }
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_AUTH_LIST))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Auth/List">
+                                <i class="nav-icon icon-cursor"></i> Auth List
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
+        @if (SessionHelper.CheckAuthForCurrentUser(new string[] { AuthCodeStatic.PAGE_EMPLOYEE_LIST, AuthCodeStatic.PAGE_EMPLOYEE_ADD }))
+        {
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon icon-layers"></i> Employees
+                </a>
+                <ul class="nav-dropdown-items">
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_EMPLOYEE_ADD))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Employee/Add">
+                                <i class="nav-icon icon-cursor"></i> Employee Add
+                            </a>
+                        </li>
+                    }
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_EMPLOYEE_LIST))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Employee/List">
+                                <i class="nav-icon icon-cursor"></i> Employee List
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
+        @if (SessionHelper.CheckAuthForCurrentUser(new string[] { AuthCodeStatic.PAGE_LAB_ADD, AuthCodeStatic.PAGE_LAB_LIST }))
+        {
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon icon-layers"></i> Labs
+                </a>
+                <ul class="nav-dropdown-items">
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_LAB_ADD))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Lab/Add">
+                                <i class="nav-icon icon-cursor"></i> Lab Add
+                            </a>
+                        </li>
+                    }
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_LAB_LIST))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Lab/List">
+                                <i class="nav-icon icon-cursor"></i> Lab List
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
+        @if (SessionHelper.CheckAuthForCurrentUser(new string[] { AuthCodeStatic.PAGE_MOVE_ADD, AuthCodeStatic.PAGE_MOVE_LIST }))
+        {
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon icon-layers"></i> Move's
+                </a>
+                <ul class="nav-dropdown-items">
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_MOVE_ADD))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Move/Add">
+                                <i class="nav-icon icon-cursor"></i> Move Add
+                            </a>
+                        </li>
+                    }
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_MOVE_LIST))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Move/List">
+                                <i class="nav-icon icon-cursor"></i> Move List
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
+        @if (SessionHelper.CheckAuthForCurrentUser(new string[] { AuthCodeStatic.PAGE_PROFILE_LIST, AuthCodeStatic.PAGE_PROFILE_ADD, AuthCodeStatic.PAGE_PROFILEDETAIL_BATCHEDIT, AuthCodeStatic.PAGE_PROFILEEMPLOYEE_BATCHEDIT }))
+        {
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon icon-layers"></i> Profiles And Auths
+                </a>
+                <ul class="nav-dropdown-items">
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_PROFILE_ADD))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Profile/Add">
+                                <i class="nav-icon icon-cursor"></i> Profile Add
+                            </a>
+                        </li>
+                    }
+
+
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_PROFILE_LIST))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Profile/List">
+                                <i class="nav-icon icon-cursor"></i>Profile List
+                            </a>
+                        </li>
+                    }
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_PROFILEDETAIL_BATCHEDIT))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/ProfileDetail/BatchEdit">
+                                <i class="nav-icon icon-cursor"></i> Profile Details
+                            </a>
+                        </li>
+                    }
+                    @if (SessionHelper.CheckAuthForCurrentUser(AuthCodeStatic.PAGE_PROFILEEMPLOYEE_BATCHEDIT))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/ProfileEmployee/BatchEdit">
+                                <i class="nav-icon icon-cursor"></i> Profile Employees
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </li>
+        }*@
+
+
+                </ul>
+            </nav>
+            @*<button class="sidebar-minimizer brand-minimizer" type="button"></button>*@
+        </div>
+        <main class="main">
+            <!-- Breadcrumb-->
+            <ol class="breadcrumb">
+                @*<li class="breadcrumb-item">Home</li>*@
+                @*<li class="breadcrumb-item">
+                        <a href="#">Admin</a>
+                    </li>*@
+                @*<li class="breadcrumb-item active">Dashboard</li>*@
+                <!-- Breadcrumb Menu-->
+                @*<li class="breadcrumb-menu d-md-down-none">
+                        <div class="btn-group" role="group" aria-label="Button group">
+                            <a class="btn" href="#">
+                                <i class="icon-speech"></i>
+                            </a>
+                            <a class="btn" href="~/">
+                                <i class="icon-graph"></i>  Dashboard
+                            </a>
+                            <a class="btn" href="#">
+                                <i class="icon-settings"></i>  Settings
+                            </a>
+                        </div>
+                    </li>*@
+
+            </ol>
+            <div class="container-fluid">
+                <div class="animated fadeIn">
+
+                    @RenderBody()
+
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
         </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - CarPark.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+    <footer class="app-footer">
+        <div>
+            <span>&copy; @DateTime.Now.Year - Created By: Talha Erdoğan</span>
+        </div>
+        <div class="ml-auto">
+            <span>Powered by</span>
+            <span>Assan Bilişim</span>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    <!-- Modal -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="modalProcessing" data-keyboard="false" data-backdrop="static" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align:center;">
+                    <p><i class="fa fa-circle-o-notch fa-spin" style="font-size:48px;color:red"></i></p>
+                    <p>&nbsp;</p>
+                    <h4><strong>İşlem yapılıyor...</strong></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- CoreUI and necessary plugins-->
+    <script src="~/theme/vendors/jquery/js/jquery.min.js"></script>
+    <script src="~/theme/vendors/popper.js/js/popper.min.js"></script>
+    <script src="~/theme/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/theme/vendors/pace-progress/js/pace.min.js"></script>
+    <script src="~/theme/vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
+    <script src="~/theme/vendors/@@coreui/coreui/js/coreui.min.js"></script>
+    <!-- chart -->
+    <script src="~/theme/vendors/chart.js/js/Chart.min.js"></script>
+    <!-- moment js -->
+    <script src="~/theme/vendors/moment/moment-with-locales.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="~/theme/vendors/daterangepicker(2.1.24)/daterangepicker.js"></script>
+    <!-- cookie -->
+    <script src="~/theme/vendors/js-cookie-2.2.1/js.cookie.min.js"></script>
+    <!-- select2-->
+    <script src="~/theme/vendors/select2-4.0.12/js/select2.min.js"></script>
+
+    <!-- jquery validation -->
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ErrorMessagePartial");}
+
+    <!-- custom scripts at layout -->
+    <script>
+
+        $(document).ready(function () {
+
+            // modalProcessing modal gosteriminin arkaplanıyla beraber en ustte gorunmesi icin z index duzenlemesi yapildi https://stackoverflow.com/questions/37759177/bootstrap-modal-overlay-another-modal
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function () {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            });
+
+        });
+
+    </script>
+
+    <script>
+
+        /* sidebar-nav icin scroll bar konumunu kaydetme islevi 201912051630 */
+        $(document).ready(function () {
+
+            $(".sidebar-nav").scroll(function () {
+                // cookie'ye kaydedilir
+                Cookies.set("AT_SidebarNav_ScrollTop", $(".sidebar-nav").scrollTop());
+            });
+
+            if (Cookies.get("AT_SidebarNav_ScrollTop")) {
+                $(".sidebar-nav").scrollTop(Cookies.get("AT_SidebarNav_ScrollTop"));
+                console.log(".sidebar-nav scrollTop:" + Cookies.get("AT_SidebarNav_ScrollTop"));
+            }
+
+        });
+
+    </script>
+
+
+    <script>
+        //menude sadece 1 tane dropdown listesinin aktif olmasını ayarlamak için kullanılmıştır.
+        $('li.nav-item.nav-dropdown a').on('click', function (e) {
+            if (!$('li.nav-item.nav-dropdown').is(e.target)
+
+            ) {
+                $('li.nav-item.nav-dropdown').removeClass('open');
+            }
+        });
+
+    </script>
+
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>

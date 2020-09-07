@@ -25,6 +25,27 @@ namespace CarPark.Web.Business
         public async Task<Return<PaginatedList<Auth>>> GetAllPaginatedWithDetailBySearchFilter(int currentPage, int pageSize, string sortOn, string sortDirection, string filterCode, string filterName)
         {
             return await _client.GetAllPaginatedWithDetailBySearchFilter(currentPage, pageSize, sortOn, sortDirection, filterCode, filterName);
+            //Return<PaginatedList<Auth>> todos =new Return<PaginatedList<Auth>>();
+
+            //var myAPI = RestService.For<IMyAPI>("http://jsonplaceholder.typicode.com");
+
+            //await  _client.GetAllPaginatedWithDetailBySearchFilter(currentPage, pageSize, sortOn, sortDirection, filterCode, filterName).ContinueWith(ret =>
+            //{
+            //    if (ret.IsCompleted == true
+            //     && ret.Status == TaskStatus.RanToCompletion)
+            //    {
+            //        todos = ret.Result;
+            //    }
+            //    else
+            //    {
+            //        todos.Data = null;
+            //        todos.Message = ret.Exception.Message;
+            //       // todos.Status = ret.Status;
+            //        todos.Success = false;
+            //    }
+            //});
+
+            //return todos;
         }
 
         public async Task<Return<Auth>> GetById(int id) => await _client.GetById(id);

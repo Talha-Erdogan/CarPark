@@ -96,6 +96,8 @@ namespace CarPark.API.Controllers
                 responseModel.Errors = new List<ReturnError>();
                 responseModel.Errors.Add(error);
                 responseModel.Data = null; //hata oluştugundan dolayı Data null olarak dönülür.
+                                           // return BadRequest(responseModel);
+                                           //return Ok(responseModel);
                 return BadRequest(responseModel);
             }
         }
