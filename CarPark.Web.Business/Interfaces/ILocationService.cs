@@ -14,7 +14,7 @@ namespace CarPark.Web.Business.Interfaces
     [Headers("Authorization: Bearer")]
     public interface ILocationService
     {
-        [Get("/items?CurrentPage={currentPage}&PageSize={pageSize}&SortOn={sortOn}&SortDirection={sortDirection}&Name={name}")]
+        [Get("/?CurrentPage={currentPage}&PageSize={pageSize}&SortOn={sortOn}&SortDirection={sortDirection}&Name={name}")]
         Task<Return<PaginatedList<Location>>> GetAllPaginatedWithDetailBySearchFilter([Query] int currentPage, [Query] int pageSize, [Query] string sortOn, [Query] string sortDirection, [Query] string name);
 
         [Get("/{id}")]

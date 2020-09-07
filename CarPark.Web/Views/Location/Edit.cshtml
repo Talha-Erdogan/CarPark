@@ -1,54 +1,40 @@
 ﻿@using CarPark.Web.Business.Common
 @using CarPark.Web.Controllers
-@model CarPark.Web.Models.Car.AddViewModel
+@model CarPark.Web.Models.Location.AddViewModel
 
 @{
-    ViewData["Title"] = "Car Edit";
+    ViewData["Title"] = "Location Edit";
 }
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong> Car Edit </strong>
+                <strong> Location Edit </strong>
             </div>
             <div class="card-body">
 
-                @using (Html.BeginForm("Edit", "Car", FormMethod.Post, new { @class = "form-horizontal input-sm" }))
+                @using (Html.BeginForm("Edit", "Location", FormMethod.Post, new { @class = "form-horizontal input-sm" }))
                 {
                     @Html.HiddenFor(m => m.Id)
                     <div class="form-group row">
-                        <label class="col-md-2 col-form-label">Plate</label>
+                        <label class="col-md-2 col-form-label">Name</label>
                         <div class="col-md-9">
-                            @Html.TextBoxFor(m => m.Plate, new { @class = "form-control input-sm" })
-                            @Html.ValidationMessageFor(m => m.Plate, null, new { @class = "help-block text-danger" })
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.Name, null, new { @class = "help-block text-danger" })
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-md-2 col-form-label">Brand</label>
-                        <div class="col-md-9">
-                            @Html.TextBoxFor(m => m.Brand, new { @class = "form-control input-sm" })
-                            @Html.ValidationMessageFor(m => m.Brand, null, new { @class = "help-block text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-md-2 col-form-label">Model</label>
-                        <div class="col-md-9">
-                            @Html.TextBoxFor(m => m.Model, new { @class = "form-control input-sm" })
-                            @Html.ValidationMessageFor(m => m.Model, null, new { @class = "help-block text-danger" })
-                        </div>
-                    </div>
+                  
 
                     <div class="form-group row">
                         <div class="col-md-12">
                             <button class="btn btn-sm btn-primary" type="submit" id="btnSubmit" name="SubmitType" value="Edit">
                                 <i class="fa fa-dot-circle-o"></i>Save
                             </button>
-                            &nbsp;
                            
-                            <a class="btn btn-sm btn-danger" href="~/Car/List">
+                            &nbsp;
+                            <a class="btn btn-sm btn-danger" href="~/Location/List">
                                 <i class="fa fa-ban"></i> Cancel
                             </a>
                         </div>

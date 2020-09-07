@@ -14,7 +14,7 @@ namespace CarPark.Web.Business.Interfaces
     [Headers("Authorization: Bearer")]
     public interface IPersonnelService
     {
-        [Get("/items?CurrentPage={currentPage}&PageSize={pageSize}&SortOn={sortOn}&SortDirection={sortDirection}&Name={name}&LastName={lastName}")]
+        [Get("/?CurrentPage={currentPage}&PageSize={pageSize}&SortOn={sortOn}&SortDirection={sortDirection}&Name={name}&LastName={lastName}")]
         Task<Return<PaginatedList<Personnel>>> GetAllPaginatedWithDetailBySearchFilter([Query] int currentPage, [Query] int pageSize, [Query] string sortOn, [Query] string sortDirection, [Query] string name, [Query] string lastName);
 
         [Get("/{id}")]

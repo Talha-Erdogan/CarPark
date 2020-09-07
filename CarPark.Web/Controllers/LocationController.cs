@@ -6,22 +6,22 @@ using CarPark.Web.Business.Common;
 using CarPark.Web.Business.Common.Enums;
 using CarPark.Web.Business.Enums;
 using CarPark.Web.Business.Interfaces;
-using CarPark.Web.Business.Models.Car;
-using CarPark.Web.Models.Car;
+using CarPark.Web.Business.Models.Location;
+using CarPark.Web.Models.Location;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPark.Web.Controllers
 {
-    public class CarController : Controller
+    public class LocationController : Controller
     {
-        private readonly ICarService _carService;
-        public CarController(ICarService carService)
+        private readonly ILocationService _locationService;
+        public LocationController(ILocationService locationService)
         {
-            _carService = carService;
+            _locationService = locationService;
         }
 
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_LIST)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_LIST)]
         public ActionResult List()
         {
             ListViewModel model = new ListViewModel();
@@ -33,7 +33,7 @@ namespace CarPark.Web.Controllers
             model.PageSize = model.PageSize.HasValue ? model.PageSize.Value : 10;
             model.CurrentLanguageTwoChar = SessionHelper.CurrentLanguageTwoChar;
 
-            var apiResponseModel = _carService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection,model.Filter.Filter_Plate).Result;
+            var apiResponseModel = _locationService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Name).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
                 model.DataList = apiResponseModel.Data;
@@ -46,7 +46,7 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_LIST)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_LIST)]
         [HttpPost]
         public ActionResult List(ListViewModel model)
         {
@@ -71,7 +71,7 @@ namespace CarPark.Web.Controllers
 
             model.CurrentLanguageTwoChar = SessionHelper.CurrentLanguageTwoChar;
 
-            var apiResponseModel = _carService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Plate).Result;
+            var apiResponseModel = _locationService.GetAllPaginatedWithDetailBySearchFilter(model.CurrentPage.Value, model.PageSize.Value, model.SortOn, model.SortDirection, model.Filter.Filter_Name).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
                 model.DataList = apiResponseModel.Data;
@@ -84,16 +84,16 @@ namespace CarPark.Web.Controllers
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_ADD)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_ADD)]
         public ActionResult Add()
         {
-            Models.Car.AddViewModel model = new AddViewModel();
+            Models.Location.AddViewModel model = new AddViewModel();
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_ADD)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_ADD)]
         [HttpPost]
-        public ActionResult Add(Models.Car.AddViewModel modell)
+        public ActionResult Add(Models.Location.AddViewModel modell)
         {
             if (!ModelState.IsValid)
             {
@@ -101,14 +101,13 @@ namespace CarPark.Web.Controllers
                 return View(modell);
             }
 
-            Business.Models.Car.AddRequestModel car = new Business.Models.Car.AddRequestModel();
-            car.Plate = modell.Plate;
-            car.Brand = modell.Brand;
-            car.Model = modell.Model;
-            var apiResponseModel = _carService.Add(car).Result;
+            Business.Models.Location.AddRequestModel location = new Business.Models.Location.AddRequestModel();
+            location.Name = modell.Name;
+            
+            var apiResponseModel = _locationService.Add(location).Result;
             if (apiResponseModel.Status == ResultStatusCodeStatic.Success)
             {
-                return RedirectToAction(nameof(CarController.List));
+                return RedirectToAction(nameof(LocationController.List));
             }
             else
             {
@@ -117,68 +116,63 @@ namespace CarPark.Web.Controllers
             }
         }
 
-        // [AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_EDIT)]
+        // [AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_EDIT)]
         public ActionResult Edit(int id)
         {
-            Models.Car.AddViewModel model = new AddViewModel();
-            var apiResponseModel = _carService.GetById(id).Result;
+            Models.Location.AddViewModel model = new AddViewModel();
+            var apiResponseModel = _locationService.GetById(id).Result;
             if (apiResponseModel.Status != ResultStatusCodeStatic.Success)
             {
                 ViewBag.ErrorMessage = apiResponseModel.Message;
                 return View(model);
             }
 
-            var car = apiResponseModel.Data;
-            if (car == null)
+            var location = apiResponseModel.Data;
+            if (location == null)
             {
                 return View("_ErrorNotExist");
             }
 
-            model.Id = car.Id;
-            model.Plate = car.Plate;
-            model.Brand = car.Brand;
-            model.Model = car.Model;
+            model.Id = location.Id;
+            model.Name = location.Name;
             return View(model);
         }
 
-        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_CAR_EDIT)]
+        //[AppAuthorizeFilter(AuthCodeStatic.PAGE_LOCATION_EDIT)]
         [HttpPost]
-        public ActionResult Edit(Models.Car.AddViewModel modell)
+        public ActionResult Edit(Models.Location.AddViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(modell);
+                return View(model);
             }
 
-            var apiResponseModel = _carService.GetById(modell.Id).Result;
+            var apiResponseModel = _locationService.GetById(model.Id).Result;
             if (apiResponseModel.Status != ResultStatusCodeStatic.Success)
             {
                 ViewBag.ErrorMessage = apiResponseModel.Message;
-                return View(modell);
+                return View(model);
             }
 
-            var car = apiResponseModel.Data;
+            var location = apiResponseModel.Data;
 
-            if (car == null)
+            if (location == null)
             {
                 return View("_ErrorNotExist");
             }
 
             AddRequestModel editModel = new AddRequestModel();
-            editModel.Id = car.Id;
-            editModel.Plate = modell.Plate;
-            editModel.Brand = modell.Brand;
-            editModel.Model = modell.Model;
+            editModel.Id = location.Id;
+            editModel.Name = model.Name;
 
-           
-                var apiEditResponseModel = _carService.Edit(modell.Id, editModel).Result;
-                if (apiEditResponseModel.Status != ResultStatusCodeStatic.Success)
-                {
-                    ViewBag.ErrorMessage = apiEditResponseModel.Message != null ? apiEditResponseModel.Message : "Not Edited";
-                    return View(modell);
-                }
-           
-            return RedirectToAction(nameof(CarController.List));
+            var apiEditResponseModel = _locationService.Edit(model.Id, editModel).Result;
+            if (apiEditResponseModel.Status != ResultStatusCodeStatic.Success)
+            {
+                ViewBag.ErrorMessage = apiEditResponseModel.Message != null ? apiEditResponseModel.Message : "Not Edited";
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(LocationController.List));
         }
     }
 }
